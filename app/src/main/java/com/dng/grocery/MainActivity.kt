@@ -59,8 +59,8 @@ class MainActivity : ComponentActivity() {
                             CartScreen(viewModel = groceryViewModel, onCheckout = {
                                 navController.navigate("checkout")
                             })
-                        }
-                        composable("checkout") {
+                        
+                           composable("checkout") {
                             CheckoutScreen(viewModel = groceryViewModel, onOrderPlaced = { orderId ->
                                 navController.navigate("order_confirmation/$orderId")
                             })
@@ -68,7 +68,20 @@ class MainActivity : ComponentActivity() {
                         composable("orders") {
                             MyOrdersScreen(viewModel = groceryViewModel)
                         }
-                        composable("admin") {
+                        composable("order_confirmation/{orderId}") { backStackEntry ->
+    val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
+
+    OrderConfirmationScreen(
+        orderId = orderId,
+        onContinueShopping = {
+            navController.navigate("home") {
+                popUpTo("home") {
+                    inclusive = true
+                }
+        }
+    )
+        }
+                            composable("admin") {
                             AdminDashboardScreen(viewModel = groceryViewModel)
                         }
                     }
